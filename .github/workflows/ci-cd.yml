@@ -23,7 +23,12 @@ jobs:
           cd api
           mypy . --config-file mypy.ini
 
-      - name: Lint (black + flake8)
-        run: |
-          cd api
-          flake8 .
+      - name: Lint (black)
+        uses: rickstaa/action-black@v1
+        with:
+          path: api
+
+      - name: Lint (flake8)
+        uses: py-actions/flake8@v2
+        with:
+          path: api
