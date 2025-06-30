@@ -5,12 +5,19 @@ from common.event import Event
 from common.abstract_message_bus import AbstractMessageBus
 
 # Import commands and events for User aggregate
-from modules.auth.domain.commands.user_commands import RegisterUserCommand, LoginUserCommand
-from modules.auth.domain.events.user_events import UserCreatedEvent
+from modules.auth.domain.commands.user_commands import (
+    RegisterUserCommand,
+    LoginUserCommand,
+)
 
 # Import handlers for commands and events for User aggregate
-from modules.auth.application.handlers.commands.user_command_handlers import UserCommandHandler
-#import modules.auth.application.handlers.events.user_event_handlers as user_event_handlers
+from modules.auth.application.handlers.commands.user_command_handlers import (
+    UserCommandHandler,
+)
+
+# import modules.auth.application.handlers.events.user_event_handlers as
+# user_event_handlers
+
 
 class MessageBus(AbstractMessageBus):
     def handle(self, message, uok: AbstractUnitOfWork):
@@ -26,8 +33,13 @@ class MessageBus(AbstractMessageBus):
                 raise ValueError(f"Unknown message type: {type(current_message)}")
         return self._results
 
+
 # Commands registration
-MessageBus.register_command_handler(RegisterUserCommand, UserCommandHandler.handle_create_user_command)
-MessageBus.register_command_handler(LoginUserCommand, UserCommandHandler.handle_login_user_command)
+MessageBus.register_command_handler(
+    RegisterUserCommand, UserCommandHandler.handle_create_user_command
+)
+MessageBus.register_command_handler(
+    LoginUserCommand, UserCommandHandler.handle_login_user_command
+)
 
 # Events registration

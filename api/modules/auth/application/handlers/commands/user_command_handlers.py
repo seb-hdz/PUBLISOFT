@@ -1,16 +1,22 @@
-from modules.auth.domain.commands.user_commands import RegisterUserCommand, LoginUserCommand
+from modules.auth.domain.commands.user_commands import (
+    RegisterUserCommand,
+    LoginUserCommand,
+)
 from modules.auth.infrastructure.unit_of_work import SqlAlchemyUnitOfWork
 from modules.auth.domain.value_objects.vo import PasswordHashVO, UserCodeVO, EmailVO
 from modules.auth.domain.entities.user import User, UserStateEnum
 from modules.auth.domain.services.user_services import validar_credenciales
 from config.settings import settings
-from jose import jwt 
+from jose import jwt
+
 
 class UserCommandHandler:
-    
+
     @staticmethod
-    def handle_create_user_command(command: RegisterUserCommand, uok: SqlAlchemyUnitOfWork):
-         with uok:
+    def handle_create_user_command(
+        command: RegisterUserCommand, uok: SqlAlchemyUnitOfWork
+    ):
+        with uok:
             # Create value objects
             email = EmailVO(command.email)
             hash_password = PasswordHashVO.hash_password(command.password)
@@ -33,15 +39,14 @@ class UserCommandHandler:
     def handle_login_user_command(command: LoginUserCommand, uok: SqlAlchemyUnitOfWork):
         with uok:
             user = validar_credenciales(
-                email=command.email,
-                password=command.password,
-                uok=uok
+                email=command.email, password=command.password, uok=uok
             )
 
             if user.state != UserStateEnum.ACTIVE:
                 raise ValueError("User is not active")
 
-            # Maybe should call public API to User module for more data related to student or admin
+            # Maybe should call public API to User module for more data related to
+            # student or admin
             user_data_for_token = {
                 "id": str(user.id),
                 "email": str(user.email),
@@ -50,8 +55,7 @@ class UserCommandHandler:
             }
 
             # Generate JWT token
-            accesstoken = jwt.encode(user_data_for_token, settings.JWT_SECRET)
+            accesstoken = jwt.encode(user_data_for_token, settings.JWT_SECRET or "")
 
             # Return the accesstoken
             return accesstoken
-             

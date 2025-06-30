@@ -1,6 +1,7 @@
 # Here we will implement the unit of work pattern for the auth module (if needed).
 from abc import ABC, abstractmethod
 
+
 class AbstractUnitOfWork(ABC):
     """
     Abstract base class for unit of work.
@@ -10,7 +11,7 @@ class AbstractUnitOfWork(ABC):
     def __exit__(self, exc_type, exc_value, traceback):
         if exc_type:  # solo si hubo excepción
             self.rollback()
-        
+
     @abstractmethod
     def commit(self):
         """
@@ -32,4 +33,6 @@ class AbstractUnitOfWork(ABC):
         """
         Collect events from the repositories.
         """
-        raise NotImplementedError("Collect events method must be implemented by subclass.")
+        raise NotImplementedError(
+            "Collect events method must be implemented by subclass."
+        )

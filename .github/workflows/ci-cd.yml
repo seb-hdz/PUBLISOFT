@@ -1,0 +1,35 @@
+name: CI/CD
+
+on:
+  pull_request:
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: |
+          cd api
+          pip install -r requirements.txt
+
+      - name: Type check (mypy)
+        run: |
+          cd api
+          mypy . --config-file mypy.ini
+
+      - name: Lint (black)
+        uses: rickstaa/action-black@v1
+        with:
+          args: api
+
+      - name: Lint (flake8)
+        uses: py-actions/flake8@v2
+        with:
+          path: api
+          args: --max-line-length=88 --extend-ignore=E203,W503

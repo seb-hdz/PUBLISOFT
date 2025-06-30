@@ -1,19 +1,25 @@
-from sqlalchemy import Column, ForeignKey, Enum, Integer, String, DateTime, UUID
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, ForeignKey, Enum, Integer, String
+from sqlalchemy.orm import Relationship, relationship
 from common.session import Base
-from modules.auth.domain.entities.user import User
 from modules.auth.domain.entities.user import UserStateEnum
 from modules.auth.infrastructure.database.models.base_entity import BaseEntitySQLAlchemy
 from modules.auth.infrastructure.database.models.roles import RoleSQLAlchemy
 
+
 class UserSQLAlchemy(Base, BaseEntitySQLAlchemy):
-    __tablename__ = 'Users'
-    __table_args__ = {'schema': 'custom_auth'}
+    __tablename__ = "Users"
+    __table_args__ = {"schema": "custom_auth"}
 
-    email = Column(String(255), unique=True, nullable=False)
-    hash_password = Column(String(255), nullable=False)
-    state = Column(Enum(UserStateEnum), nullable=False)
-    role_id = Column(Integer, ForeignKey('custom_auth.Roles.id'), nullable=False)
-    user_code = Column(String(255), unique=True, nullable=False)
+    email: str | Column[str] = Column(String(255), unique=True, nullable=False)
+    hash_password: str | Column[str] = Column(String(255), nullable=False)
+    state: UserStateEnum | Column[UserStateEnum] = Column(
+        Enum(UserStateEnum), nullable=False
+    )
+    role_id: int | Column[int] = Column(
+        Integer, ForeignKey("custom_auth.Roles.id"), nullable=False
+    )
+    user_code: str | Column[str] = Column(String(255), unique=True, nullable=False)
 
-    role = relationship("RoleSQLAlchemy", back_populates="users")  # Assuming RoleSQLAlchemy has a users relationship
+    role: Relationship["RoleSQLAlchemy"] = relationship(
+        "RoleSQLAlchemy", back_populates="users"
+    )  # Assuming RoleSQLAlchemy has a users relationship

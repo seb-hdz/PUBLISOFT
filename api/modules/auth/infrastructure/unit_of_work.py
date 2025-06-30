@@ -1,5 +1,8 @@
 from common.abstract_unit_of_work import AbstractUnitOfWork
-from modules.auth.infrastructure.database.repositories.user_repository import UserRepositorySQLAlchemy
+from modules.auth.infrastructure.database.repositories.user_repository import (
+    UserRepositorySQLAlchemy,
+)
+
 
 class SqlAlchemyUnitOfWork(AbstractUnitOfWork):
     def __init__(self, session_factory):
@@ -13,13 +16,13 @@ class SqlAlchemyUnitOfWork(AbstractUnitOfWork):
     def __exit__(self, exc_type, exc_value, traceback):
         super().__exit__(exc_type, exc_value, traceback)
         self.session.close()
-        
+
     def commit(self):
         self.session.commit()
 
     def rollback(self):
         self.session.rollback()
-        
+
     def collect_events(self):
         for user in self.user_repository.seen:
             while user.events:
