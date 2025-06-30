@@ -17,9 +17,12 @@ jobs:
         run: pip install -r api/requirements.txt
 
       - name: Type check (mypy)
-        run: mypy ./api --explicit-package-bases --install-types --non-interactive
+        run: |
+          cd api
+          mypy . --config-file mypy.ini
 
       - name: Lint (black + flake8)
         run: |
-          black --check ./api
-          flake8 ./api
+          cd api
+          black --check .
+          flake8 .
