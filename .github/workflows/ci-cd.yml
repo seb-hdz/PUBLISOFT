@@ -29,6 +29,7 @@ jobs:
           args: api
 
       - name: Lint (flake8)
-        run: |
-          cd api
-          flake8 common modules config main.py --max-line-length=88 --extend-ignore=E203,W503
+        uses: py-actions/flake8@v2
+        with:
+          path: api
+          args: --max-line-length=88 --extend-ignore=E203,W503
