@@ -45,7 +45,8 @@ class UserCommandHandler:
             if user.state != UserStateEnum.ACTIVE:
                 raise ValueError("User is not active")
 
-            # Maybe should call public API to User module for more data related to student or admin
+            # Maybe should call public API to User module for more data related to
+            # student or admin
             user_data_for_token = {
                 "id": str(user.id),
                 "email": str(user.email),

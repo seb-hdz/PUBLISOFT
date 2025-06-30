@@ -7,7 +7,8 @@ class RegisterUserCommand(Command):
         self.password = password
         self.name = name
         self.last_name = last_name
-        # We invent (when creating the user entity) the usercode, ROLE is set to Student by default, State is Active by default
+        # We invent (when creating the user entity) the usercode, ROLE is set to
+        # Student by default, State is Active by default
 
 
 class LoginUserCommand(Command):

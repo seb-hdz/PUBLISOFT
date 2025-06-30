@@ -3,7 +3,8 @@ from sqlalchemy.orm import relationship
 from common.session import Base
 
 
-# This model does not inherit from BaseEntitySQLAlchemy because it does not need the created_at and updated_at fields.
+# This model does not inherit from BaseEntitySQLAlchemy because it does not need the
+# created_at and updated_at fields.
 class RoleSQLAlchemy(Base):
     __tablename__ = "Roles"
     __table_args__ = {"schema": "custom_auth"}

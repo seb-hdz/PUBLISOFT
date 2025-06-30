@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Response, HTTPException, status
+from fastapi import APIRouter, Depends, Response
 from fastapi.responses import JSONResponse
 from modules.auth.endpoints.schemas.requests import UserRegister, UserLogin
 

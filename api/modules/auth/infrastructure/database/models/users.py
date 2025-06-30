@@ -1,7 +1,6 @@
-from sqlalchemy import Column, ForeignKey, Enum, Integer, String, DateTime, UUID
+from sqlalchemy import Column, ForeignKey, Enum, Integer, String
 from sqlalchemy.orm import Relationship, relationship
 from common.session import Base
-from modules.auth.domain.entities.user import User
 from modules.auth.domain.entities.user import UserStateEnum
 from modules.auth.infrastructure.database.models.base_entity import BaseEntitySQLAlchemy
 from modules.auth.infrastructure.database.models.roles import RoleSQLAlchemy

@@ -1,7 +1,6 @@
 from modules.auth.domain.entities.base_entity import BaseEntity
 from modules.auth.domain.value_objects.vo import EmailVO, UserCodeVO, PasswordHashVO
 from modules.auth.domain.events.user_events import UserCreatedEvent
-from typing import List, Optional
 import enum
 import uuid
 from datetime import datetime, timezone

@@ -42,7 +42,8 @@ class UserCodeVO:
     def generate_user_code(cls) -> "UserCodeVO":
         """
         Generate a random user code.
-        For simplicity, let's assume the user code is a random string number with max 8 digits.
+        For simplicity, let's assume the user code is a random string number with max
+        8 digits.
         """
         import random
 
@@ -55,7 +56,8 @@ class UserCodeVO:
     def is_valid_user_code(user_code: str) -> bool:
         """
         Validate the user code format.
-        For simplicity, let's assume a valid user code is alphanumeric and between 5 to 20 characters.
+        For simplicity, let's assume a valid user code is alphanumeric and between 5
+        to 20 characters.
         """
         return (
             isinstance(user_code, str)
@@ -68,7 +70,8 @@ class UserCodeVO:
 class PasswordHashVO:
     """
     Value Object for Password Hash.
-    This class encapsulates the hashed password and provides methods for password hashing and verification.
+    This class encapsulates the hashed password and provides methods for password
+    hashing and verification.
     """
 
     _hash_password: str
@@ -98,5 +101,6 @@ class PasswordHashVO:
         Static method to verify the given password against the stored hash.
         """
         return bcrypt.checkpw(
-            password.encode("utf-8"), hash_passwordVO._hash_password.encode("utf-8")
+            password.encode("utf-8"),
+            hash_passwordVO._hash_password.encode("utf-8"),
         )
