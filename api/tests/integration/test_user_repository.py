@@ -3,7 +3,9 @@ from sqlalchemy.orm import Session
 from modules.auth.infrastructure.database.repositories.user_repository import (
     UserRepositorySQLAlchemy,
 )
-from modules.auth.infrastructure.database.models.users import User as UserModel
+from modules.auth.infrastructure.database.models.users import (
+    UserSQLAlchemy as UserModel,
+)
 from modules.auth.domain.entities.user import User, UserStateEnum, UserRoleEnum
 from modules.auth.domain.value_objects.vo import EmailVO, UserCodeVO, PasswordHashVO
 from datetime import datetime, timezone
