@@ -5,13 +5,15 @@ from jose import jwt
 from config import settings
 
 def getcurrentuser(required: bool = True):
-    def _gettoken(accesstoken: Annotated[str, Cookie()] = None):
+    def _gettoken(accesstoken: Annotated[str|None, Cookie()] = None):
         if not required and not accesstoken:
             return None
         try:
             if not accesstoken:
                 raise Exception("Login required")
-            obj = jwt.decode(accesstoken, settings.JWT_SECRET)
+            if not settings.settings.JWT_SECRET:
+                raise Exception("JWT_SECRET is not set")
+            obj = jwt.decode(accesstoken, settings.settings.JWT_SECRET)
             loginuser = dict(
                 bplevel=obj["bplevel"],
                 bpcode=obj["bpcode"],

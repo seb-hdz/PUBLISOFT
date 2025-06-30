@@ -4,16 +4,17 @@ from modules.auth.infrastructure.database.models.users import UserSQLAlchemy
 from modules.auth.infrastructure.database.models.roles import RoleSQLAlchemy
 from modules.auth.infrastructure.database.models.base_entity import BaseEntitySQLAlchemy
 
+
 class UserMapper:
     @staticmethod
     def to_entity(user_orm: UserSQLAlchemy) -> User:
         # Convierte el modelo ORM a la entidad de dominio
         base_kwargs = BaseEntitySQLAlchemy.orm_to_base_entity(user_orm)
         return User(
-            email=EmailVO(user_orm.email),
-            hash_password=PasswordHashVO(user_orm.hash_password),
-            state=UserStateEnum(user_orm.state),
-            user_code=UserCodeVO(user_orm.user_code),
+            email=EmailVO(str(user_orm.email)),
+            hash_password=PasswordHashVO(str(user_orm.hash_password)),
+            state=UserStateEnum(str(user_orm.state)),
+            user_code=UserCodeVO(str(user_orm.user_code)),
             role=UserRoleEnum(user_orm.role.name) if user_orm.role else None,
             **base_kwargs
         )

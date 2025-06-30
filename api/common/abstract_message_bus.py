@@ -1,14 +1,15 @@
 # Here we will define the message bus for the modules.
 from common.abstract_unit_of_work import AbstractUnitOfWork
 from abc import ABC, abstractmethod
+from typing import Callable
 
 class AbstractMessageBus(ABC):
     """
     Message bus for handling commands and events.
     """
     
-    _event_handlers = {}
-    _command_handlers = {}
+    _event_handlers: dict[type, list[Callable]] = {}
+    _command_handlers: dict[type, Callable] = {}
 
     def __init__(self):
         self._results = []
