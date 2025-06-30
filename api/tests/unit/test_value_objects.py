@@ -11,7 +11,7 @@ class TestEmailVO:
         """Test creating EmailVO with valid email."""
         # Arrange & Act
         email = EmailVO("test@example.com")
-        
+
         # Assert
         assert email.email == "test@example.com"
         assert str(email) == "test@example.com"
@@ -30,7 +30,7 @@ class TestEmailVO:
         assert EmailVO.is_valid_email("test@example.com") is True
         assert EmailVO.is_valid_email("user.name@domain.co.uk") is True
         assert EmailVO.is_valid_email("test+tag@example.com") is True
-        
+
         # Arrange & Act & Assert - Invalid emails
         assert EmailVO.is_valid_email("invalid-email") is False
         assert EmailVO.is_valid_email("@example.com") is False
@@ -45,7 +45,7 @@ class TestEmailVO:
         email1 = EmailVO("test@example.com")
         email2 = EmailVO("test@example.com")
         email3 = EmailVO("different@example.com")
-        
+
         # Act & Assert
         assert email1 == email2
         assert email1 != email3
@@ -58,7 +58,7 @@ class TestEmailVO:
         email1 = EmailVO("test@example.com")
         email2 = EmailVO("test@example.com")
         email3 = EmailVO("different@example.com")
-        
+
         # Act & Assert
         assert hash(email1) == hash(email2)
         assert hash(email1) != hash(email3)
@@ -73,7 +73,7 @@ class TestUserCodeVO:
         """Test creating UserCodeVO with valid user code."""
         # Arrange & Act
         user_code = UserCodeVO("USER123")
-        
+
         # Assert
         assert user_code.user_code == "USER123"
         assert str(user_code) == "USER123"
@@ -92,7 +92,7 @@ class TestUserCodeVO:
         assert UserCodeVO.is_valid_user_code("USER123") is True
         assert UserCodeVO.is_valid_user_code("ADMIN456") is True
         assert UserCodeVO.is_valid_user_code("STUDENT789") is True
-        
+
         # Arrange & Act & Assert - Invalid user codes
         assert UserCodeVO.is_valid_user_code("INVALID") is False
         assert UserCodeVO.is_valid_user_code("123USER") is False
@@ -106,7 +106,7 @@ class TestUserCodeVO:
         code1 = UserCodeVO("USER123")
         code2 = UserCodeVO("USER123")
         code3 = UserCodeVO("USER456")
-        
+
         # Act & Assert
         assert code1 == code2
         assert code1 != code3
@@ -119,7 +119,7 @@ class TestUserCodeVO:
         code1 = UserCodeVO("USER123")
         code2 = UserCodeVO("USER123")
         code3 = UserCodeVO("USER456")
-        
+
         # Act & Assert
         assert hash(code1) == hash(code2)
         assert hash(code1) != hash(code3)
@@ -134,7 +134,7 @@ class TestPasswordHashVO:
         """Test creating PasswordHashVO with valid password hash."""
         # Arrange & Act
         password_hash = PasswordHashVO("hashed_password_123")
-        
+
         # Assert
         assert password_hash.hash_password == "hashed_password_123"
         assert str(password_hash) == "hashed_password_123"
@@ -151,8 +151,13 @@ class TestPasswordHashVO:
         """Test password hash validation method."""
         # Arrange & Act & Assert - Valid password hashes
         assert PasswordHashVO.is_valid_hash_password("hashed_password_123") is True
-        assert PasswordHashVO.is_valid_hash_password("$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewdBPj4J/HS.i") is True
-        
+        assert (
+            PasswordHashVO.is_valid_hash_password(
+                "$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewdBPj4J/HS.i"
+            )
+            is True
+        )
+
         # Arrange & Act & Assert - Invalid password hashes
         assert PasswordHashVO.is_valid_hash_password("") is False
         assert PasswordHashVO.is_valid_hash_password(None) is False
@@ -164,7 +169,7 @@ class TestPasswordHashVO:
         hash1 = PasswordHashVO("hashed_password_123")
         hash2 = PasswordHashVO("hashed_password_123")
         hash3 = PasswordHashVO("different_hash_456")
-        
+
         # Act & Assert
         assert hash1 == hash2
         assert hash1 != hash3
@@ -177,7 +182,7 @@ class TestPasswordHashVO:
         hash1 = PasswordHashVO("hashed_password_123")
         hash2 = PasswordHashVO("hashed_password_123")
         hash3 = PasswordHashVO("different_hash_456")
-        
+
         # Act & Assert
         assert hash(hash1) == hash(hash2)
-        assert hash(hash1) != hash(hash3) 
+        assert hash(hash1) != hash(hash3)

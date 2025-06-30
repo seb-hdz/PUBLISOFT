@@ -1,6 +1,8 @@
 import pytest
 from sqlalchemy.orm import Session
-from modules.auth.infrastructure.database.repositories.user_repository import UserRepositorySQLAlchemy
+from modules.auth.infrastructure.database.repositories.user_repository import (
+    UserRepositorySQLAlchemy,
+)
 from modules.auth.infrastructure.database.models.users import User as UserModel
 from modules.auth.domain.entities.user import User, UserStateEnum, UserRoleEnum
 from modules.auth.domain.value_objects.vo import EmailVO, UserCodeVO, PasswordHashVO
@@ -19,26 +21,28 @@ class TestUserRepository:
         """Test adding a user to the database."""
         # Arrange
         repository = UserRepositorySQLAlchemy(db_session)
-        
+
         # Create a domain user
         email = EmailVO("test@example.com")
         password_hash = PasswordHashVO("hashed_password_123")
         user_code = UserCodeVO("USER123")
-        
+
         user = User.create(
             email=email,
             hash_password=password_hash,
             user_code=user_code,
             name="Test",
-            last_name="User"
+            last_name="User",
         )
-        
+
         # Act
         repository.add(user)
         db_session.commit()
-        
+
         # Assert
-        db_user = db_session.query(UserModel).filter_by(email="test@example.com").first()
+        db_user = (
+            db_session.query(UserModel).filter_by(email="test@example.com").first()
+        )
         assert db_user is not None
         assert db_user.email == "test@example.com"
         assert db_user.user_code == "USER123"
@@ -51,7 +55,7 @@ class TestUserRepository:
         """Test getting a user by email when user exists."""
         # Arrange
         repository = UserRepositorySQLAlchemy(db_session)
-        
+
         # Create and add a user to database
         db_user = UserModel(
             id="test-id-123",
@@ -63,14 +67,14 @@ class TestUserRepository:
             role="STUDENT",
             state="ACTIVE",
             created_at=datetime.now(timezone.utc),
-            updated_at=datetime.now(timezone.utc)
+            updated_at=datetime.now(timezone.utc),
         )
         db_session.add(db_user)
         db_session.commit()
-        
+
         # Act
         result = repository.get_by_email("test@example.com")
-        
+
         # Assert
         assert result is not None
         assert result.email.email == "test@example.com"
@@ -84,10 +88,10 @@ class TestUserRepository:
         """Test getting a user by email when user doesn't exist."""
         # Arrange
         repository = UserRepositorySQLAlchemy(db_session)
-        
+
         # Act
         result = repository.get_by_email("nonexistent@example.com")
-        
+
         # Assert
         assert result is None
 
@@ -98,7 +102,7 @@ class TestUserRepository:
         # Arrange
         repository = UserRepositorySQLAlchemy(db_session)
         user_id = "test-id-123"
-        
+
         # Create and add a user to database
         db_user = UserModel(
             id=user_id,
@@ -110,14 +114,14 @@ class TestUserRepository:
             role="STUDENT",
             state="ACTIVE",
             created_at=datetime.now(timezone.utc),
-            updated_at=datetime.now(timezone.utc)
+            updated_at=datetime.now(timezone.utc),
         )
         db_session.add(db_user)
         db_session.commit()
-        
+
         # Act
         result = repository.get_by_id(user_id)
-        
+
         # Assert
         assert result is not None
         assert result.id == user_id
@@ -129,10 +133,10 @@ class TestUserRepository:
         """Test getting a user by ID when user doesn't exist."""
         # Arrange
         repository = UserRepositorySQLAlchemy(db_session)
-        
+
         # Act
         result = repository.get_by_id("nonexistent-id")
-        
+
         # Assert
         assert result is None
 
@@ -142,7 +146,7 @@ class TestUserRepository:
         """Test updating a user in the database."""
         # Arrange
         repository = UserRepositorySQLAlchemy(db_session)
-        
+
         # Create and add a user to database
         db_user = UserModel(
             id="test-id-123",
@@ -154,24 +158,26 @@ class TestUserRepository:
             role="STUDENT",
             state="ACTIVE",
             created_at=datetime.now(timezone.utc),
-            updated_at=datetime.now(timezone.utc)
+            updated_at=datetime.now(timezone.utc),
         )
         db_session.add(db_user)
         db_session.commit()
-        
+
         # Get the domain user
         user = repository.get_by_id("test-id-123")
-        
+
         # Update the user
         user.state = UserStateEnum.SUSPENDED
         user.role = UserRoleEnum.ADMIN
-        
+
         # Act
         repository.update(user)
         db_session.commit()
-        
+
         # Assert
-        updated_db_user = db_session.query(UserModel).filter_by(id="test-id-123").first()
+        updated_db_user = (
+            db_session.query(UserModel).filter_by(id="test-id-123").first()
+        )
         assert updated_db_user.state == "SUSPENDED"
         assert updated_db_user.role == "ADMIN"
 
@@ -181,7 +187,7 @@ class TestUserRepository:
         """Test deleting a user from the database."""
         # Arrange
         repository = UserRepositorySQLAlchemy(db_session)
-        
+
         # Create and add a user to database
         db_user = UserModel(
             id="test-id-123",
@@ -193,18 +199,18 @@ class TestUserRepository:
             role="STUDENT",
             state="ACTIVE",
             created_at=datetime.now(timezone.utc),
-            updated_at=datetime.now(timezone.utc)
+            updated_at=datetime.now(timezone.utc),
         )
         db_session.add(db_user)
         db_session.commit()
-        
+
         # Get the domain user
         user = repository.get_by_id("test-id-123")
-        
+
         # Act
         repository.delete(user)
         db_session.commit()
-        
+
         # Assert
         deleted_user = db_session.query(UserModel).filter_by(id="test-id-123").first()
         assert deleted_user is None
@@ -215,7 +221,7 @@ class TestUserRepository:
         """Test getting all users from the database."""
         # Arrange
         repository = UserRepositorySQLAlchemy(db_session)
-        
+
         # Create and add multiple users to database
         users_data = [
             {
@@ -226,7 +232,7 @@ class TestUserRepository:
                 "name": "User1",
                 "last_name": "Test",
                 "role": "STUDENT",
-                "state": "ACTIVE"
+                "state": "ACTIVE",
             },
             {
                 "id": "test-id-2",
@@ -236,10 +242,10 @@ class TestUserRepository:
                 "name": "User2",
                 "last_name": "Test",
                 "role": "ADMIN",
-                "state": "ACTIVE"
-            }
+                "state": "ACTIVE",
+            },
         ]
-        
+
         for user_data in users_data:
             db_user = UserModel(
                 **user_data,
@@ -247,12 +253,12 @@ class TestUserRepository:
                 updated_at=datetime.now(timezone.utc)
             )
             db_session.add(db_user)
-        
+
         db_session.commit()
-        
+
         # Act
         result = repository.get_all()
-        
+
         # Assert
         assert len(result) == 2
         emails = [user.email.email for user in result]
@@ -265,7 +271,7 @@ class TestUserRepository:
         """Test getting users by role."""
         # Arrange
         repository = UserRepositorySQLAlchemy(db_session)
-        
+
         # Create and add users with different roles
         users_data = [
             {
@@ -276,7 +282,7 @@ class TestUserRepository:
                 "name": "Student",
                 "last_name": "Test",
                 "role": "STUDENT",
-                "state": "ACTIVE"
+                "state": "ACTIVE",
             },
             {
                 "id": "test-id-2",
@@ -286,7 +292,7 @@ class TestUserRepository:
                 "name": "Admin",
                 "last_name": "Test",
                 "role": "ADMIN",
-                "state": "ACTIVE"
+                "state": "ACTIVE",
             },
             {
                 "id": "test-id-3",
@@ -296,10 +302,10 @@ class TestUserRepository:
                 "name": "Student2",
                 "last_name": "Test",
                 "role": "STUDENT",
-                "state": "ACTIVE"
-            }
+                "state": "ACTIVE",
+            },
         ]
-        
+
         for user_data in users_data:
             db_user = UserModel(
                 **user_data,
@@ -307,21 +313,21 @@ class TestUserRepository:
                 updated_at=datetime.now(timezone.utc)
             )
             db_session.add(db_user)
-        
+
         db_session.commit()
-        
+
         # Act
         students = repository.get_by_role(UserRoleEnum.STUDENT)
         admins = repository.get_by_role(UserRoleEnum.ADMIN)
-        
+
         # Assert
         assert len(students) == 2
         assert len(admins) == 1
-        
+
         student_emails = [user.email.email for user in students]
         assert "student@example.com" in student_emails
         assert "student2@example.com" in student_emails
-        
+
         admin_emails = [user.email.email for user in admins]
         assert "admin@example.com" in admin_emails
 
@@ -331,7 +337,7 @@ class TestUserRepository:
         """Test getting users by state."""
         # Arrange
         repository = UserRepositorySQLAlchemy(db_session)
-        
+
         # Create and add users with different states
         users_data = [
             {
@@ -342,7 +348,7 @@ class TestUserRepository:
                 "name": "Active",
                 "last_name": "User",
                 "role": "STUDENT",
-                "state": "ACTIVE"
+                "state": "ACTIVE",
             },
             {
                 "id": "test-id-2",
@@ -352,7 +358,7 @@ class TestUserRepository:
                 "name": "Suspended",
                 "last_name": "User",
                 "role": "STUDENT",
-                "state": "SUSPENDED"
+                "state": "SUSPENDED",
             },
             {
                 "id": "test-id-3",
@@ -362,10 +368,10 @@ class TestUserRepository:
                 "name": "Active2",
                 "last_name": "User",
                 "role": "STUDENT",
-                "state": "ACTIVE"
-            }
+                "state": "ACTIVE",
+            },
         ]
-        
+
         for user_data in users_data:
             db_user = UserModel(
                 **user_data,
@@ -373,20 +379,20 @@ class TestUserRepository:
                 updated_at=datetime.now(timezone.utc)
             )
             db_session.add(db_user)
-        
+
         db_session.commit()
-        
+
         # Act
         active_users = repository.get_by_state(UserStateEnum.ACTIVE)
         suspended_users = repository.get_by_state(UserStateEnum.SUSPENDED)
-        
+
         # Assert
         assert len(active_users) == 2
         assert len(suspended_users) == 1
-        
+
         active_emails = [user.email.email for user in active_users]
         assert "active@example.com" in active_emails
         assert "active2@example.com" in active_emails
-        
+
         suspended_emails = [user.email.email for user in suspended_users]
-        assert "suspended@example.com" in suspended_emails 
+        assert "suspended@example.com" in suspended_emails

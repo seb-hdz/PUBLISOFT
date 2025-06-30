@@ -2,6 +2,7 @@ from modules.auth.infrastructure.unit_of_work import SqlAlchemyUnitOfWork
 from modules.auth.domain.value_objects.vo import PasswordHashVO
 from modules.auth.domain.entities.user import User
 
+
 def validar_credenciales(email: str, password: str, uok: SqlAlchemyUnitOfWork) -> User:
     """
     Validate user credentials.
@@ -15,7 +16,5 @@ def validar_credenciales(email: str, password: str, uok: SqlAlchemyUnitOfWork) -
     # Verify the password
     if not PasswordHashVO.verify_password(password, user.hash_password):
         raise ValueError("Invalid password")
-    
-    return user
-    
 
+    return user

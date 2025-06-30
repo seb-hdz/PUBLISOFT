@@ -3,11 +3,12 @@ from common.abstract_unit_of_work import AbstractUnitOfWork
 from abc import ABC, abstractmethod
 from typing import Callable
 
+
 class AbstractMessageBus(ABC):
     """
     Message bus for handling commands and events.
     """
-    
+
     _event_handlers: dict[type, list[Callable]] = {}
     _command_handlers: dict[type, Callable] = {}
 
@@ -36,8 +37,8 @@ class AbstractMessageBus(ABC):
         for handler in handlers:
             handler(event, uok)
             self.__messages_queue.extend(uok.collect_events())
-        
-    @abstractmethod        
+
+    @abstractmethod
     def handle(self, message, uok: AbstractUnitOfWork):
         """
         Handle a message (command or event).

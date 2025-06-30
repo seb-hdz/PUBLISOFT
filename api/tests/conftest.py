@@ -1,4 +1,5 @@
 import os
+
 os.environ["DATABASE_USER"] = "test_user"
 os.environ["DATABASE_PWD"] = "test_password"
 os.environ["DATABASE_HOST"] = "localhost"
@@ -21,7 +22,9 @@ import shutil
 # Import database models and components
 from modules.auth.infrastructure.unit_of_work import SqlAlchemyUnitOfWork
 from modules.auth.application.message_bus import MessageBus
-from modules.auth.infrastructure.database.repositories.user_repository import UserRepositorySQLAlchemy
+from modules.auth.infrastructure.database.repositories.user_repository import (
+    UserRepositorySQLAlchemy,
+)
 
 # Create a test base for database models
 TestBase = declarative_base()
@@ -44,15 +47,17 @@ def test_database():
         connect_args={"check_same_thread": False},
         poolclass=StaticPool,
     )
-    
+
     # Create all tables
     TestBase.metadata.create_all(bind=test_engine)
-    
+
     # Create a session factory
-    TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=test_engine)
-    
+    TestingSessionLocal = sessionmaker(
+        autocommit=False, autoflush=False, bind=test_engine
+    )
+
     yield test_engine, TestingSessionLocal
-    
+
     # Clean up
     TestBase.metadata.drop_all(bind=test_engine)
 
@@ -74,12 +79,12 @@ def client(test_database):
     """Create a test client for the FastAPI application."""
     # Import the app here to avoid issues during test discovery
     from main import app
-    
+
     # Override the database engine for testing
     test_engine, _ = test_database
-    
+
     # Patch the engine in the main app
-    with patch('common.session.engine', test_engine):
+    with patch("common.session.engine", test_engine):
         with TestClient(app) as test_client:
             yield test_client
 
@@ -113,25 +118,20 @@ def sample_user_data():
         "email": "test@example.com",
         "password": "testpassword123",
         "name": "Test",
-        "last_name": "User"
+        "last_name": "User",
     }
 
 
 @pytest.fixture
 def sample_login_data():
     """Sample login data for testing."""
-    return {
-        "email": "test@example.com",
-        "password": "testpassword123"
-    }
+    return {"email": "test@example.com", "password": "testpassword123"}
 
 
 @pytest.fixture
 def auth_headers():
     """Sample authentication headers for testing."""
-    return {
-        "Authorization": "Bearer test_token"
-    }
+    return {"Authorization": "Bearer test_token"}
 
 
 # Environment variables for testing
@@ -144,4 +144,4 @@ def setup_test_env():
     os.environ["DATABASE_PORT"] = "5432"
     os.environ["DATABASE_NAME"] = "test_db"
     os.environ["JWT_SECRET"] = "test_jwt_secret_key_for_testing_purposes_only"
-    yield 
+    yield

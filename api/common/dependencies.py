@@ -1,11 +1,12 @@
 # Here we will define global dependencies for the application.
 from fastapi import Cookie, HTTPException, status
-from typing import Annotated 
-from jose import jwt 
+from typing import Annotated
+from jose import jwt
 from config import settings
 
+
 def getcurrentuser(required: bool = True):
-    def _gettoken(accesstoken: Annotated[str|None, Cookie()] = None):
+    def _gettoken(accesstoken: Annotated[str | None, Cookie()] = None):
         if not required and not accesstoken:
             return None
         try:
@@ -31,4 +32,5 @@ def getcurrentuser(required: bool = True):
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Login required",
             )
+
     return _gettoken
